@@ -8,7 +8,7 @@
 :root{--red:#d71920;--yellow:#ffc928;--ink:#171717;--cream:#faf7f2;--green:#0ca653}
 *{box-sizing:border-box}body{margin:0;background:var(--cream);color:#211d1b;font-family:Arial,Helvetica,sans-serif}
 .wrap{max-width:1200px;margin:auto}
-.hero{background:linear-gradient(100deg,rgba(0,0,0,.95),rgba(0,0,0,.70)),url('images/banner-mie.jpg') center/cover;color:#fff;padding:34px 20px;border-bottom:5px solid var(--yellow)}
+.hero{background:linear-gradient(100deg,rgba(0,0,0,.95),rgba(0,0,0,.70)),url('banner-mie.jpg') center/cover;color:#fff;padding:34px 20px;border-bottom:5px solid var(--yellow)}
 .hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:center;min-height:220px}
 .brand{color:var(--yellow);font-weight:900;font-size:clamp(38px,5vw,64px);margin:0;letter-spacing:-2px}
 .tagline{font-size:clamp(18px,2.4vw,27px);font-weight:bold;margin:2px 0 12px}
@@ -79,15 +79,15 @@ footer{background:#111;color:#fff;text-align:center;padding:27px 15px;border-top
 <script>
 const WHATSAPP="6282295307091";
 const products=[
-{id:1,name:"Mie Goreng Original",price:5000,desc:"Mie gurih dengan bumbu pilihan.",photo:"images/mie-original.jpg"},
-{id:2,name:"Mie Goreng Spesial",price:15000,desc:"Mie goreng lezat dengan rasa spesial.",photo:"images/mie-spesial.jpg"},
-{id:3,name:"Mie Goreng Level Pedas",price:10000,desc:"Pilihan pas untuk pencinta pedas.",photo:"images/mie-pedas.jpg"},
-{id:4,name:"Mie Goreng Nyemek",price:8000,desc:"Mie hangat dengan kuah gurih.",photo:"images/mie-nyemek.jpg"},
-{id:5,name:"Mie Kuah kumplit",price:15000,desc:"Mie kuah hangat dan gurih.",photo:"images/mie-kuah.jpg"},
-{id:6,name:"Mie Kuah Original",price:5000,desc:"Mie kuah hangat dan gurih.",photo:"images/mie-kuah1.jpg"},
-{id:7,name:"Tambah Telur",price:3000,desc:"Tambahan telur untuk menu pilihanmu.",photo:"images/telur.jpg"},
-{id:8,name:"Tambah Sosis",price:3000,desc:"Tambahan Sosis untuk menu pilihanmu.",photo:"images/sosis.jpg"},
-{id:9,name:"Tambah Baso",price:3000,desc:"Tambahan Baso untuk menu pilihanmu.",photo:"images/baso.jpg"}
+{id:1,name:"Mie Goreng Original",price:5000,desc:"Mie gurih dengan bumbu pilihan.",photo:"mie-original.jpg"},
+{id:2,name:"Mie Goreng Spesial",price:15000,desc:"Mie goreng lezat dengan rasa spesial.",photo:"mie-spesial.jpg"},
+{id:3,name:"Mie Goreng Level Pedas",price:10000,desc:"Pilihan pas untuk pencinta pedas.",photo:"mie-pedas.jpg"},
+{id:4,name:"Mie Goreng Nyemek",price:8000,desc:"Mie hangat dengan kuah gurih.",photo:"mie-nyemek.jpg"},
+{id:5,name:"Mie Kuah kumplit",price:15000,desc:"Mie kuah hangat dan gurih.",photo:"mie-kuah.jpg"},
+{id:6,name:"Mie Kuah Original",price:5000,desc:"Mie kuah hangat dan gurih.",photo:"mie-kuah1.jpg"},
+{id:7,name:"Tambah Telur",price:3000,desc:"Tambahan telur untuk menu pilihanmu.",photo:"telur.jpg"},
+{id:8,name:"Tambah Sosis",price:3000,desc:"Tambahan Sosis untuk menu pilihanmu.",photo:"sosis.jpg"},
+{id:9,name:"Tambah Baso",price:3000,desc:"Tambahan Baso untuk menu pilihanmu.",photo:"baso.jpg"}
 ];
 const cart={};
 const rp=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(n);
