@@ -8,7 +8,7 @@
 :root{--red:#d71920;--yellow:#ffc928;--ink:#171717;--cream:#faf7f2;--green:#0ca653}
 *{box-sizing:border-box}body{margin:0;background:var(--cream);color:#211d1b;font-family:Arial,Helvetica,sans-serif}
 .wrap{max-width:1200px;margin:auto}
-.hero{background:linear-gradient(100deg,rgba(0,0,0,.95),rgba(0,0,0,.70)),url('banner-mie.jpg') center/cover;color:#fff;padding:34px 20px;border-bottom:5px solid var(--yellow)}
+.hero{background:linear-gradient(100deg,rgba(0,0,0,.95),rgba(0,0,0,.70)),url('images/banner-mie.jpg') center/cover;color:#fff;padding:34px 20px;border-bottom:5px solid var(--yellow)}
 .hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:center;min-height:220px}
 .brand{color:var(--yellow);font-weight:900;font-size:clamp(38px,5vw,64px);margin:0;letter-spacing:-2px}
 .tagline{font-size:clamp(18px,2.4vw,27px);font-weight:bold;margin:2px 0 12px}
@@ -17,7 +17,7 @@
 .hero-photo{width:100%;height:220px;object-fit:cover;border-radius:22px;border:2px solid #ffffff55;box-shadow:0 12px 28px #0008}
 main{padding:26px 18px 45px}.heading{margin-bottom:17px}.heading h2{font-size:30px;margin:0}.heading p{margin:6px 0;color:#666}
 .layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,.95fr);gap:20px;align-items:start}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.category-tabs{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 16px}.category-btn{background:#fff;border:1px solid #e5d8ce;color:#3a2b25;border-radius:24px;padding:10px 16px}.category-btn.active{background:var(--red);color:#fff;border-color:var(--red)}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .card{background:#fff;border:1px solid #e9e4de;border-radius:16px;overflow:hidden;box-shadow:0 5px 16px #321b0d0c}
 .food-photo{width:100%;height:165px;object-fit:cover;display:block;background:#ead7b8}
 .details{padding:13px}.details h3{margin:0 0 6px;font-size:16px}.desc{font-size:13px;color:#686868;line-height:1.45;min-height:37px;margin:0 0 10px}
@@ -47,12 +47,13 @@ footer{background:#111;color:#fff;text-align:center;padding:27px 15px;border-top
     <p>Pilih mie favoritmu, atur pesanan, lalu kirim langsung ke WhatsApp kami. Praktis dan mudah!</p>
     <span class="badge">🔥 DIBUAT FRESH SAAT DIPESAN</span>
   </div>
-  <img class="hero-photo" src="banner-mie.jpg" alt="Foto mie goreng dengan telur dan sayuran">
+  <img class="hero-photo" src="images/banner-mie.jpg" alt="Foto mie goreng dengan telur dan sayuran">
 </div></header>
 <main class="wrap">
   <div class="heading"><h2>Menu Favorit 🍜</h2><p>Pilih menu dan tekan tombol tambah.</p></div>
   <div class="layout">
     <div>
+      <nav class="category-tabs" aria-label="Kategori menu"><button class="category-btn active" data-category="Semua" onclick="setCategory('Semua')">Semua</button><button class="category-btn" data-category="Mie" onclick="setCategory('Mie')">🍜 Mie</button><button class="category-btn" data-category="Minuman" onclick="setCategory('Minuman')">🥤 Minuman</button><button class="category-btn" data-category="Snack" onclick="setCategory('Snack')">🍟 Snack</button></nav>
       <div class="grid" id="menu"></div>
       <section class="features">
         <div><b>🥬</b>Bahan Pilihan<br>Berkualitas</div><div><b>👨‍🍳</b>Proses Cepat<br>& Higienis</div><div><b>🛡️</b>Harga<br>Bersahabat</div><div><b>💬</b>Pesan Mudah<br>Lewat WhatsApp</div>
@@ -77,21 +78,26 @@ footer{background:#111;color:#fff;text-align:center;padding:27px 15px;border-top
 </main>
 <footer><strong>Toko Zizan</strong>Terima kasih sudah memilih Toko Zizan ❤️</footer>
 <script>
-const WHATSAPP="6281214884285";
+const WHATSAPP="6282295307091";
 const products=[
-{id:1,name:"Mie Goreng Original",price:5000,desc:"Mie gurih dengan bumbu pilihan.",photo:"mie-original.jpg"},
-{id:2,name:"Mie Goreng Spesial",price:15000,desc:"Mie goreng lezat dengan rasa spesial.",photo:"mie-spesial.jpg"},
-{id:3,name:"Mie Goreng Level Pedas",price:10000,desc:"Pilihan pas untuk pencinta pedas.",photo:"mie-pedas.jpg"},
-{id:4,name:"Mie Goreng Nyemek",price:8000,desc:"Mie hangat dengan kuah gurih.",photo:"mie-nyemek.jpg"},
-{id:5,name:"Mie Kuah kumplit",price:15000,desc:"Mie kuah hangat dan gurih.",photo:"mie-kuah.jpg"},
-{id:6,name:"Mie Kuah Original",price:5000,desc:"Mie kuah hangat dan gurih.",photo:"mie-kuah1.jpg"},
-{id:7,name:"Tambah Telur",price:3000,desc:"Tambahan telur untuk menu pilihanmu.",photo:"telur.jpg"},
-{id:8,name:"Tambah Sosis",price:3000,desc:"Tambahan Sosis untuk menu pilihanmu.",photo:"sosis.jpg"},
-{id:9,name:"Tambah Baso",price:3000,desc:"Tambahan Baso untuk menu pilihanmu.",photo:"baso.jpg"}
+{id:1,name:"Mie Goreng Original",price:8000,desc:"Mie gurih dengan bumbu pilihan.",photo:"images/mie-original.jpg",category:"Mie"},
+{id:2,name:"Mie Goreng Spesial",price:15000,desc:"Mie goreng lezat dengan rasa spesial.",photo:"images/mie-spesial.jpg",category:"Mie"},
+{id:3,name:"Mie Goreng Level Pedas",price:10000,desc:"Pilihan pas untuk pencinta pedas.",photo:"images/mie-pedas.jpg",category:"Mie"},
+{id:4,name:"Mie Goreng Nyemek",price:8000,desc:"Mie hangat dengan kuah gurih.",photo:"images/mie-nyemek.jpg",category:"Mie"},
+{id:5,name:"Mie Kuah",price:5000,desc:"Mie kuah hangat dan gurih.",photo:"images/mie-kuah.jpg",category:"Mie"},
+{id:6,name:"Tambah Telur",price:3000,desc:"Tambahan telur untuk menu pilihanmu.",photo:"images/telur.jpg",category:"Mie"},
+{id:7,name:"Es Teh Manis",price:4000,desc:"Teh segar dengan es batu.",photo:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=700&q=80",category:"Minuman"},
+{id:8,name:"Es Jeruk",price:5000,desc:"Minuman jeruk segar, manis dan menyegarkan.",photo:"https://images.unsplash.com/photo-1513558161293-cdad765edfd7?auto=format&fit=crop&w=700&q=80",category:"Minuman"},
+{id:9,name:"Air Mineral",price:4000,desc:"Air mineral dingin atau suhu ruang.",photo:"https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=700&q=80",category:"Minuman"},
+{id:10,name:"Kentang Goreng",price:8000,desc:"Kentang goreng renyah untuk camilan.",photo:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=700&q=80",category:"Snack"},
+{id:11,name:"Sosis Goreng",price:7000,desc:"Sosis goreng gurih dan nikmat.",photo:"https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=700&q=80",category:"Snack"},
+{id:12,name:"Nugget Ayam",price:8000,desc:"Nugget ayam goreng renyah.",photo:"https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=700&q=80",category:"Snack"}
 ];
 const cart={};
+let activeCategory="Semua";
 const rp=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(n);
-function renderMenu(){document.getElementById("menu").innerHTML=products.map(p=>`<article class="card"><img class="food-photo" src="${p.photo}" alt="${p.name}" loading="lazy"><div class="details"><h3>${p.name}</h3><p class="desc">${p.desc}</p><div class="bottom"><span class="price">${rp(p.price)}</span><button class="add" onclick="change(${p.id},1)">＋ Tambah</button></div></div></article>`).join("")}
+function setCategory(category){activeCategory=category;document.querySelectorAll(".category-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.category===category));renderMenu()}
+function renderMenu(){const shown=activeCategory==="Semua"?products:products.filter(p=>p.category===activeCategory);document.getElementById("menu").innerHTML=shown.map(p=>`<article class="card"><img class="food-photo" src="${p.photo}" alt="Foto ${p.name}" loading="lazy" onerror="this.onerror=null;this.src='images/mie-original.jpg'"><div class="details"><h3>${p.name}</h3><p class="desc">${p.desc}</p><div class="bottom"><span class="price">${rp(p.price)}</span><button class="add" onclick="change(${p.id},1)">＋ Tambah</button></div></div></article>`).join("")} 
 function change(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];renderCart()}
 function renderCart(){const items=products.filter(p=>cart[p.id]);const el=document.getElementById("cart");el.innerHTML=items.length?items.map(p=>`<div class="line"><div><b>${p.name}</b><small>${rp(p.price)} × ${cart[p.id]}</small></div><div class="qty"><button aria-label="Kurangi ${p.name}" onclick="change(${p.id},-1)">−</button><b>${cart[p.id]}</b><button aria-label="Tambah ${p.name}" onclick="change(${p.id},1)">＋</button></div></div>`).join(""):'<div class="empty">Keranjang masih kosong.<br>Yuk, pilih menu favoritmu!</div>';document.getElementById("total").textContent=rp(items.reduce((s,p)=>s+p.price*cart[p.id],0));document.getElementById("count").textContent=items.reduce((s,p)=>s+cart[p.id],0)}
 function sendOrder(){const items=products.filter(p=>cart[p.id]);if(!items.length){alert("Pilih menu terlebih dahulu.");return}const nama=document.getElementById("nama").value.trim();if(!nama){alert("Isi nama pemesan terlebih dahulu.");document.getElementById("nama").focus();return}const tipe=document.getElementById("tipe").value,alamat=document.getElementById("alamat").value.trim();if(tipe==="Diantar"&&!alamat){alert("Isi alamat pengantaran.");document.getElementById("alamat").focus();return}const total=items.reduce((s,p)=>s+p.price*cart[p.id],0);const lines=["Halo Toko Zizan, saya mau pesan:","",...items.map(p=>`- ${p.name} x${cart[p.id]} = ${rp(p.price*cart[p.id])}`),"",`TOTAL: ${rp(total)}`,`Nama: ${nama}`,`Metode: ${tipe}`];if(tipe==="Diantar")lines.push(`Alamat: ${alamat}`);lines.push(`Level pedas: ${document.getElementById("pedas").value}`);const c=document.getElementById("catatan").value.trim();if(c)lines.push(`Catatan: ${c}`);lines.push("Mohon konfirmasi pesanan saya. Terima kasih.");window.open("https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(lines.join("\n")),"_blank")}
