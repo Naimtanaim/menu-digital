@@ -53,7 +53,7 @@ footer{background:#111;color:#fff;text-align:center;padding:27px 15px;border-top
   <div class="heading"><h2>Menu Favorit 🍜</h2><p>Pilih menu dan tekan tombol tambah.</p></div>
   <div class="layout">
     <div>
-      <nav class="category-tabs" aria-label="Kategori menu"><button class="category-btn active" data-category="Semua" onclick="setCategory('Semua')">Semua</button><button class="category-btn" data-category="Mie" onclick="setCategory('Mie')">🍜 Mie</button><button class="category-btn" data-category="Minuman" onclick="setCategory('Minuman')">🥤 Minuman</button><button class="category-btn" data-category="Snack" onclick="setCategory('Snack')">🍟 Snack</button></nav>
+      <nav class="category-tabs" aria-label="Kategori menu"><button class="category-btn active" data-category="Semua" onclick="setCategory('Semua')">Semua</button><button class="category-btn" data-category="Mie" onclick="setCategory('Mie')">🍜 Mie</button><button class="category-btn" data-category="Minuman" onclick="setCategory('Minuman')">🥤 Minuman</button><button class="category-btn" data-category="Tambah" onclick="setCategory('Snack')"> tambah</button></nav>
       <div class="grid" id="menu"></div>
       <section class="features">
         <div><b>🥬</b>Bahan Pilihan<br>Berkualitas</div><div><b>👨‍🍳</b>Proses Cepat<br>& Higienis</div><div><b>🛡️</b>Harga<br>Bersahabat</div><div><b>💬</b>Pesan Mudah<br>Lewat WhatsApp</div>
@@ -89,9 +89,9 @@ const products=[
 {id:7,name:"Es Teh Botol",price:6000,desc:"Teh Botol segar dengan es batu.",photo:"images1.jpg",category:"Minuman"},
 {id:8,name:"Es Nutrissari",price:3000,desc:"Minuman jeruk segar, manis dan menyegarkan.",photo:"images2.jpg",category:"Minuman"},
 {id:9,name:"Es Teh Pucuk",price:5000,desc:"teh pucuk d3ngan es batu.",photo:"images3.jpg",category:"Minuman"},
-{id:10,name:"Telor",price:8000,desc:"Telor Ceplok Enak.",photo:"telur.jpg",category:"Tambah"},
-{id:11,name:"Sosis",price:7000,desc:"Sosis goreng gurih dan nikmat.",photo:"sosis.jpg",category:"Tambah"},
-{id:12,name:"Baso",price:8000,desc:"Baso ayam goreng renyah.",photo:"baso.jpg",category:"Tambah"}
+{id:10,name:"Telor",price:3000,desc:"Telor Ceplok Enak.",photo:"telur.jpg",category:"Tambah"},
+{id:11,name:"Sosis",price:3000,desc:"Sosis goreng gurih dan nikmat.",photo:"sosis.jpg",category:"Tambah"},
+{id:12,name:"Baso",price:3000,desc:"Baso ayam goreng renyah.",photo:"baso.jpg",category:"Tambah"}
 ];
 const cart={};
 let activeCategory="Semua";
