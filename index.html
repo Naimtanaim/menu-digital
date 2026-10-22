@@ -143,7 +143,19 @@ function sendOrder(){const items=products.filter(p=>cart[p.id]);if(!items.length
 function initPage(){
  const isCart=new URLSearchParams(location.search).get("page")==="cart";
  const main=document.querySelector("main.wrap"),cp=document.getElementById("cartPage");
- if(isCart){if(main)main.style.display="none";if(cp)cp.style.display="block";const photo=document.querySelector(".hero-photo");if(photo)photo.style.display="none";const p=document.querySelector(".hero p");if(p)p.textContent="Periksa menu pilihanmu dan lanjutkan pesanan."}
+ const aside=document.querySelector("main.wrap .layout > aside");
+ const layout=document.querySelector("main.wrap .layout");
+ if(isCart){
+   if(main)main.style.display="none";
+   if(cp)cp.style.display="block";
+   const photo=document.querySelector(".hero-photo");if(photo)photo.style.display="none";
+   const p=document.querySelector(".hero p");if(p)p.textContent="Periksa pesanan dan isi data pemesan di halaman keranjang.";
+ }else{
+   // Halaman depan hanya menampilkan menu. Keranjang dan data pemesan hanya muncul setelah tombol Keranjang diklik.
+   if(cp)cp.style.display="none";
+   if(aside)aside.style.display="none";
+   if(layout)layout.style.gridTemplateColumns="1fr";
+ }
  renderMenu();renderCart();renderCartPage();updateTopCount();
 }
 initPage();
