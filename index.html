@@ -13,7 +13,7 @@
 .brand{color:var(--yellow);font-weight:900;font-size:clamp(38px,5vw,64px);margin:0;letter-spacing:-2px}
 .tagline{font-size:clamp(18px,2.4vw,27px);font-weight:bold;margin:2px 0 12px}
 .hero p{line-height:1.6;color:#eee;max-width:540px}
-.badge{display:inline-block;background:var(--yellow);color:#1b1300;padding:10px 16px;border-radius:24px;font-weight:bold;font-size:13px}
+.badge{display:inline-block;background:var(--yellow);color:#1b1300;padding:10px 16px;border-radius:24px;font-weight:bold;font-size:13px}.cart-link{display:inline-flex;gap:8px;align-items:center;margin-top:12px;background:var(--green);color:#fff;padding:11px 15px;border-radius:12px;text-decoration:none;font-weight:bold}.cart-link span{background:#fff;color:#171717;border-radius:20px;padding:4px 8px}.cart-page{max-width:850px;margin:auto}.back-link{display:inline-block;margin-bottom:16px;background:#171717;color:#ffc928;padding:11px 14px;border-radius:10px;text-decoration:none;font-weight:bold}.checkout-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.continue-btn{background:#eee5dc;color:#222;border-radius:12px;padding:14px;text-align:center;text-decoration:none;font-weight:bold}.checkout-btn{background:var(--green);color:white;border-radius:12px;padding:14px;font-weight:bold}
 .hero-photo{width:100%;height:220px;object-fit:cover;border-radius:22px;border:2px solid #ffffff55;box-shadow:0 12px 28px #0008}
 main{padding:26px 18px 45px}.heading{margin-bottom:17px}.heading h2{font-size:30px;margin:0}.heading p{margin:6px 0;color:#666}
 .layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,.95fr);gap:20px;align-items:start}
@@ -45,7 +45,7 @@ footer{background:#111;color:#fff;text-align:center;padding:27px 15px;border-top
 <header class="hero"><div class="wrap hero-inner">
   <div><h1 class="brand">Toko Zizan</h1><div class="tagline">Mie Enak, Harga Bersahabat</div>
     <p>Pilih mie favoritmu, atur pesanan, lalu kirim langsung ke WhatsApp kami. Praktis dan mudah!</p>
-    <span class="badge">🔥 DIBUAT FRESH SAAT DIPESAN</span>
+    <span class="badge">🔥 DIBUAT FRESH SAAT DIPESAN</span><br><a class="cart-link" href="index.html?page=cart">🛒 Keranjang <span id="topCount">0</span></a>
   </div>
   <img class="hero-photo" src="banner-mie.jpg" alt="Foto mie goreng dengan telur dan sayuran">
 </div></header>
@@ -76,6 +76,20 @@ footer{background:#111;color:#fff;text-align:center;padding:27px 15px;border-top
     </aside>
   </div>
 </main>
+
+<section id="cartPage" class="cart-page" style="display:none;padding:24px 18px 45px">
+<a class="back-link" href="index.html">← Kembali ke Menu</a>
+<div class="heading"><h2>🛒 Keranjang Pesanan</h2><p>Periksa pesanan sebelum checkout.</p></div>
+<section class="panel"><div id="cartPageItems"></div><div class="total"><span>Total Pesanan</span><span id="cartPageTotal">Rp0</span></div><div id="cartPageEmpty" class="empty" style="display:none">Keranjang masih kosong. Silakan kembali ke menu.</div></section>
+<section id="checkoutPanel" class="panel form-panel">
+<h2>📋 Data Pemesan</h2>
+<label for="namaCart">Nama pemesan *</label><input id="namaCart" placeholder="Masukkan nama kamu">
+<label for="tipeCart">Metode pesanan *</label><select id="tipeCart"><option>Ambil sendiri</option><option>Diantar</option></select>
+<label for="alamatCart">Alamat pengantaran</label><textarea id="alamatCart" rows="2" placeholder="Isi alamat jika memilih diantar"></textarea>
+<div class="fields"><div><label for="pedasCart">Level pedas</label><select id="pedasCart"><option>Normal</option><option>Level 1</option><option>Level 2</option><option>Level 3</option><option>Level 4</option><option>Level 5</option></select></div><div><label for="catatanCart">Catatan tambahan</label><input id="catatanCart" placeholder="Contoh: tanpa daun bawang"></div></div>
+<div class="checkout-actions"><a class="continue-btn" href="index.html">＋ Tambah Menu</a><button class="checkout-btn" onclick="sendOrderFromCartPage()">💬 Checkout WhatsApp</button></div>
+</section></section>
+
 <footer><strong>Toko Zizan</strong>Terima kasih sudah memilih Toko Zizan ❤️</footer>
 <script>
 const WHATSAPP="6281214884285";
@@ -95,15 +109,44 @@ const products=[
 {id:13,name:"Krupuk yeye",price:2000,desc:"krupuk renyah.",photo:"krupuk.jpg",category:"Tambah"},
 {id:14,name:"Krupuk Gendar",price:2000,desc:"Krupuk Gendar renyah.",photo:"gendar.jpg",category:"Tambah"}
 ];
-const cart={};
+const cart=JSON.parse(localStorage.getItem("zizan_cart")||"{}");
+function saveCart(){localStorage.setItem("zizan_cart",JSON.stringify(cart))}
+function updateTopCount(){const el=document.getElementById("topCount");if(el)el.textContent=Object.values(cart).reduce((s,n)=>s+Number(n||0),0)}
 let activeCategory="Semua";
 const rp=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(n);
 function setCategory(category){activeCategory=category;document.querySelectorAll(".category-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.category===category));renderMenu()}
 function renderMenu(){const shown=activeCategory==="Semua"?products:products.filter(p=>p.category===activeCategory);document.getElementById("menu").innerHTML=shown.map(p=>`<article class="card"><img class="food-photo" src="${p.photo}" alt="Foto ${p.name}" loading="lazy" onerror="this.onerror=null;this.src='images/mie-original.jpg'"><div class="details"><h3>${p.name}</h3><p class="desc">${p.desc}</p><div class="bottom"><span class="price">${rp(p.price)}</span><button class="add" onclick="change(${p.id},1)">＋ Tambah</button></div></div></article>`).join("")} 
-function change(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];renderCart()}
+function change(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];saveCart();renderCart();renderCartPage();updateTopCount()}
 function renderCart(){const items=products.filter(p=>cart[p.id]);const el=document.getElementById("cart");el.innerHTML=items.length?items.map(p=>`<div class="line"><div><b>${p.name}</b><small>${rp(p.price)} × ${cart[p.id]}</small></div><div class="qty"><button aria-label="Kurangi ${p.name}" onclick="change(${p.id},-1)">−</button><b>${cart[p.id]}</b><button aria-label="Tambah ${p.name}" onclick="change(${p.id},1)">＋</button></div></div>`).join(""):'<div class="empty">Keranjang masih kosong.<br>Yuk, pilih menu favoritmu!</div>';document.getElementById("total").textContent=rp(items.reduce((s,p)=>s+p.price*cart[p.id],0));document.getElementById("count").textContent=items.reduce((s,p)=>s+cart[p.id],0)}
+function renderCartPage(){
+ const root=document.getElementById("cartPageItems");if(!root)return;
+ const items=products.filter(p=>cart[p.id]);
+ document.getElementById("cartPageEmpty").style.display=items.length?"none":"block";
+ document.getElementById("checkoutPanel").style.display=items.length?"block":"none";
+ root.innerHTML=items.map(p=>`<div class="line"><div><b>${p.name}</b><small>${rp(p.price)} × ${cart[p.id]} = ${rp(p.price*cart[p.id])}</small></div><div class="qty"><button onclick="change(${p.id},-1)">−</button><b>${cart[p.id]}</b><button onclick="change(${p.id},1)">＋</button><button onclick="change(${p.id},-${cart[p.id]})" style="background:#d71920;color:white">×</button></div></div>`).join("");
+ document.getElementById("cartPageTotal").textContent=rp(items.reduce((s,p)=>s+p.price*cart[p.id],0));
+}
+function sendOrderFromCartPage(){
+ const items=products.filter(p=>cart[p.id]);if(!items.length){alert("Keranjang masih kosong.");return}
+ const nama=document.getElementById("namaCart").value.trim();if(!nama){alert("Isi nama pemesan terlebih dahulu.");return}
+ const tipe=document.getElementById("tipeCart").value,alamat=document.getElementById("alamatCart").value.trim();
+ if(tipe==="Diantar"&&!alamat){alert("Isi alamat pengantaran.");return}
+ const total=items.reduce((s,p)=>s+p.price*cart[p.id],0);
+ const lines=["Halo Toko Zizan, saya mau pesan:","",...items.map(p=>`- ${p.name} x${cart[p.id]} = ${rp(p.price*cart[p.id])}`),"",`TOTAL: ${rp(total)}`,`Nama: ${nama}`,`Metode: ${tipe}`];
+ if(tipe==="Diantar")lines.push(`Alamat: ${alamat}`);
+ lines.push(`Level pedas: ${document.getElementById("pedasCart").value}`);
+ const catatan=document.getElementById("catatanCart").value.trim();if(catatan)lines.push(`Catatan: ${catatan}`);
+ lines.push("Mohon konfirmasi pesanan saya. Terima kasih.");
+ window.open("https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(lines.join("\\n")),"_blank");
+}
 function sendOrder(){const items=products.filter(p=>cart[p.id]);if(!items.length){alert("Pilih menu terlebih dahulu.");return}const nama=document.getElementById("nama").value.trim();if(!nama){alert("Isi nama pemesan terlebih dahulu.");document.getElementById("nama").focus();return}const tipe=document.getElementById("tipe").value,alamat=document.getElementById("alamat").value.trim();if(tipe==="Diantar"&&!alamat){alert("Isi alamat pengantaran.");document.getElementById("alamat").focus();return}const total=items.reduce((s,p)=>s+p.price*cart[p.id],0);const lines=["Halo Toko Zizan, saya mau pesan:","",...items.map(p=>`- ${p.name} x${cart[p.id]} = ${rp(p.price*cart[p.id])}`),"",`TOTAL: ${rp(total)}`,`Nama: ${nama}`,`Metode: ${tipe}`];if(tipe==="Diantar")lines.push(`Alamat: ${alamat}`);lines.push(`Level pedas: ${document.getElementById("pedas").value}`);const c=document.getElementById("catatan").value.trim();if(c)lines.push(`Catatan: ${c}`);lines.push("Mohon konfirmasi pesanan saya. Terima kasih.");window.open("https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(lines.join("\n")),"_blank")}
-renderMenu();renderCart();
+function initPage(){
+ const isCart=new URLSearchParams(location.search).get("page")==="cart";
+ const main=document.querySelector("main.wrap"),cp=document.getElementById("cartPage");
+ if(isCart){if(main)main.style.display="none";if(cp)cp.style.display="block";const photo=document.querySelector(".hero-photo");if(photo)photo.style.display="none";const p=document.querySelector(".hero p");if(p)p.textContent="Periksa menu pilihanmu dan lanjutkan pesanan."}
+ renderMenu();renderCart();renderCartPage();updateTopCount();
+}
+initPage();
 </script>
 </body>
 </html>
