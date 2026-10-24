@@ -126,20 +126,59 @@ function renderCartPage(){
  root.innerHTML=items.map(p=>`<div class="line"><div><b>${p.name}</b><small>${rp(p.price)} × ${cart[p.id]} = ${rp(p.price*cart[p.id])}</small></div><div class="qty"><button onclick="change(${p.id},-1)">−</button><b>${cart[p.id]}</b><button onclick="change(${p.id},1)">＋</button><button onclick="change(${p.id},-${cart[p.id]})" style="background:#d71920;color:white">×</button></div></div>`).join("");
  document.getElementById("cartPageTotal").textContent=rp(items.reduce((s,p)=>s+p.price*cart[p.id],0));
 }
-function sendOrderFromCartPage(){
- const items=products.filter(p=>cart[p.id]);if(!items.length){alert("Keranjang masih kosong.");return}
- const nama=document.getElementById("namaCart").value.trim();if(!nama){alert("Isi nama pemesan terlebih dahulu.");return}
- const tipe=document.getElementById("tipeCart").value,alamat=document.getElementById("alamatCart").value.trim();
- if(tipe==="Diantar"&&!alamat){alert("Isi alamat pengantaran.");return}
+function buildReceiptMessage(items, nama, tipe, alamat, pedas, catatan){
  const total=items.reduce((s,p)=>s+p.price*cart[p.id],0);
- const lines=["Halo Toko Zizan, saya mau pesan:","",...items.map(p=>`- ${p.name} x${cart[p.id]} = ${rp(p.price*cart[p.id])}`),"",`TOTAL: ${rp(total)}`,`Nama: ${nama}`,`Metode: ${tipe}`];
- if(tipe==="Diantar")lines.push(`Alamat: ${alamat}`);
- lines.push(`Level pedas: ${document.getElementById("pedasCart").value}`);
- const catatan=document.getElementById("catatanCart").value.trim();if(catatan)lines.push(`Catatan: ${catatan}`);
- lines.push("Mohon konfirmasi pesanan saya. Terima kasih.");
- window.open("https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(lines.join("\\n")),"_blank");
+ const now=new Date();
+ const tanggal=now.toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"});
+ const jam=now.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
+ const lines=[
+  "*        STRUK PESANAN*",
+  "*          TOKO ZIZAN*",
+  "━━━━━━━━━━━━━━━━━━━━",
+  `Tanggal : ${tanggal}`,
+  `Waktu   : ${jam}`,
+  `Nama    : ${nama}`,
+  `Metode  : ${tipe}`
+ ];
+ if(tipe==="Diantar") lines.push(`Alamat  : ${alamat}`);
+ lines.push("━━━━━━━━━━━━━━━━━━━━","*DETAIL PESANAN*");
+ items.forEach((p,i)=>{
+  lines.push(`${i+1}. ${p.name}`);
+  lines.push(`   ${cart[p.id]} x ${rp(p.price)} = ${rp(p.price*cart[p.id])}`);
+ });
+ lines.push("━━━━━━━━━━━━━━━━━━━━",`*TOTAL BAYAR: ${rp(total)}*`,"━━━━━━━━━━━━━━━━━━━━",`Level pedas : ${pedas}`);
+ if(catatan) lines.push(`Catatan     : ${catatan}`);
+ lines.push("","Mohon konfirmasi pesanan saya. Terima kasih 🙏","_Struk ini dibuat dari Menu Digital Toko Zizan._");
+ return lines.join("\n");
 }
-function sendOrder(){const items=products.filter(p=>cart[p.id]);if(!items.length){alert("Pilih menu terlebih dahulu.");return}const nama=document.getElementById("nama").value.trim();if(!nama){alert("Isi nama pemesan terlebih dahulu.");document.getElementById("nama").focus();return}const tipe=document.getElementById("tipe").value,alamat=document.getElementById("alamat").value.trim();if(tipe==="Diantar"&&!alamat){alert("Isi alamat pengantaran.");document.getElementById("alamat").focus();return}const total=items.reduce((s,p)=>s+p.price*cart[p.id],0);const lines=["Halo Toko Zizan, saya mau pesan:","",...items.map(p=>`- ${p.name} x${cart[p.id]} = ${rp(p.price*cart[p.id])}`),"",`TOTAL: ${rp(total)}`,`Nama: ${nama}`,`Metode: ${tipe}`];if(tipe==="Diantar")lines.push(`Alamat: ${alamat}`);lines.push(`Level pedas: ${document.getElementById("pedas").value}`);const c=document.getElementById("catatan").value.trim();if(c)lines.push(`Catatan: ${c}`);lines.push("Mohon konfirmasi pesanan saya. Terima kasih.");window.open("https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(lines.join("\n")),"_blank")}
+function openWhatsAppReceipt(message){
+ const url="https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(message);
+ window.open(url,"_blank");
+}
+function sendOrderFromCartPage(){
+ const items=products.filter(p=>cart[p.id]);
+ if(!items.length){alert("Keranjang masih kosong.");return}
+ const nama=document.getElementById("namaCart").value.trim();
+ if(!nama){alert("Isi nama pemesan terlebih dahulu.");document.getElementById("namaCart").focus();return}
+ const tipe=document.getElementById("tipeCart").value;
+ const alamat=document.getElementById("alamatCart").value.trim();
+ if(tipe==="Diantar"&&!alamat){alert("Isi alamat pengantaran.");document.getElementById("alamatCart").focus();return}
+ const catatan=document.getElementById("catatanCart").value.trim();
+ const message=buildReceiptMessage(items,nama,tipe,alamat,document.getElementById("pedasCart").value,catatan);
+ openWhatsAppReceipt(message);
+}
+function sendOrder(){
+ const items=products.filter(p=>cart[p.id]);
+ if(!items.length){alert("Pilih menu terlebih dahulu.");return}
+ const nama=document.getElementById("nama").value.trim();
+ if(!nama){alert("Isi nama pemesan terlebih dahulu.");document.getElementById("nama").focus();return}
+ const tipe=document.getElementById("tipe").value;
+ const alamat=document.getElementById("alamat").value.trim();
+ if(tipe==="Diantar"&&!alamat){alert("Isi alamat pengantaran.");document.getElementById("alamat").focus();return}
+ const catatan=document.getElementById("catatan").value.trim();
+ const message=buildReceiptMessage(items,nama,tipe,alamat,document.getElementById("pedas").value,catatan);
+ openWhatsAppReceipt(message);
+}
 function initPage(){
  const isCart=new URLSearchParams(location.search).get("page")==="cart";
  const main=document.querySelector("main.wrap"),cp=document.getElementById("cartPage");
